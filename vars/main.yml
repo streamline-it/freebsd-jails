@@ -6,15 +6,15 @@ freebsd_jails_default_algorithm: sha256
 freebsd_jails_releases_online:
   - release: 13.1
     algorithm: sha256sum
-    checksum: sha256:565baf7cf520cedfa01c5260f6a614b71c5e2b37ba3ee22e1342906548aa24ad  base.txz
+    checksum: sha256:565baf7cf520cedfa01c5260f6a614b71c5e2b37ba3ee22e1342906548aa24ad
     online_url: https://download.freebsd.org/ftp/releases/amd64/13.1-RELEASE/base.txz
   - release: 13.3
     algorithm: sha256sum
-    checksum: sha256:d10531d663cee5efeb7d696ca84ce90adacd1fae14dd249628fb74da0c7c2820  base.txz
+    checksum: sha256:d10531d663cee5efeb7d696ca84ce90adacd1fae14dd249628fb74da0c7c2820
     online_url: https://download.freebsd.org/ftp/releases/amd64/13.3-RELEASE/base.txz
   - release: 13.4
     algorithm: sha256sum
-    checksum: sha256:8e13b0a93daba349b8d28ad246d7beb327659b2ef4fe44d89f447392daec5a7c  base.txz
+    checksum: sha256:8e13b0a93daba349b8d28ad246d7beb327659b2ef4fe44d89f447392daec5a7c
     online_url: https://download.freebsd.org/ftp/releases/amd64/13.4-RELEASE/base.txz
   - release: 14.1
     algorithm: sha256sum
