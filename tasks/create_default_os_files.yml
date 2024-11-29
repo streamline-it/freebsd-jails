@@ -1,0 +1,62 @@
+- name: check to see if /etc/fstab exists
+  register: fstab_stat
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.stat:
+    path: "{{ item['path'] }}/etc/fstab"
+    get_attributes: true
+
+- name: ensure fstab file exists
+  when: fstab_stat['results'][my_loop_var]['stat']['exists'] == false
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  loop_control:
+    index_var: my_loop_var
+  ansible.builtin.copy:
+    content: ""
+    dest: "{{ item['path'] }}/etc/fstab"
+    owner: root
+    group: wheel
+    mode: '0744'
+
+- name: check to see if /etc/rc.conf exists
+  register: rc_conf_stat
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.stat:
+    path: "{{ item['path'] }}/etc/rc.conf"
+    get_attributes: true
+
+- name: ensure rc.conf file exists, if not create it
+  when: rc_conf_stat['results'][my_loop_var]['stat']['exists'] == false
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  loop_control:
+    index_var: my_loop_var
+  ansible.builtin.copy:
+    content: ""
+    dest: "{{ item['path'] }}/etc/rc.conf"
+    owner: root
+    group: wheel
+    mode: '0744'
+
+- name: check to see if /etc/resolv.conf exists
+  register: resolv_conf_stat
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.stat:
+    path: "{{ item['path'] }}/etc/resolv.conf"
+    get_attributes: true
+
+- name: ensure resolv.conf file exists, if not create it
+  when: resolv_conf_stat['results'][my_loop_var]['stat']['exists'] == false
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  loop_control:
+    index_var: my_loop_var
+  ansible.builtin.copy:
+    content: ""
+    dest: "{{ item['path'] }}/etc/resolv.conf"
+    owner: root
+    group: wheel
+    mode: '0644'

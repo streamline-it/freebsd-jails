@@ -1,0 +1,45 @@
+- name: ensure the base tar file exists registering stat result registring stat result
+  register: base_tar_stat
+  ansible.builtin.stat:
+    path: "{{ freebsd_jails_jails_path }}/{{ freebsd_jails_jails_base_dir }}"
+    get_attributes: true
+    
+- name: ensure the base package is downloaded if base tar doesn't exist (online-pull)
+  when: freebsd_jails_online_pull == true and 
+    base_tar_stat['stat']['exists'] == false
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.get_url:
+    url: "{{ item['url'] }}"
+    dest: "{{ item['dest'] }}"
+    checksum: "{{ item['online_checksum'] }}"
+
+- name: ensure the base package is copied if it doesn't already exist (local pull)
+  when: freebsd_jails_online_pull == false and
+    base_tar_stat['stat']['exists'] == false
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.copy:
+    src: "{{ item['src']  }}"
+    dest: "{{ item['dest'] }}"
+
+- name: get checksum for local pull
+  register: stat_checksum
+  when: freebsd_jails_online_pull == false
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.stat:
+    path: "{{ item['dest'] }}"
+    checksum_algorithm: sha256
+    get_checksum: true
+
+- name: fail if checksum doesn't match for local pulled base.txz
+  when: freebsd_jails_online_pull == false and
+    stat_checksum['results'][my_index]['stat']['checksum']+"  base.txz" != item['local_checksum']
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  loop_control:
+    index_var: my_index
+  ansible.builtin.fail:
+    msg: "Checksum didn't match for base.txz"
+

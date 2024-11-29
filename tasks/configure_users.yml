@@ -1,0 +1,22 @@
+---
+- name: see if user exists
+  ignore_errors: true
+  with_nested:
+    - "{{ freebsd_jails_jailinfo }}"
+    - "{{ freebsd_jails_users }}"
+  register: user_stat
+  changed_when: false
+
+  ansible.builtin.command:
+    cmd: jexec -lU root {{ item[0]['name'] }} getent passwd {{ item[1]['user_name'] }}
+
+- name: ensure users exist 
+  ignore_errors: true
+  when: user_stat['results'][my_loop_var]['rc'] == 2
+  with_nested:
+    - "{{ freebsd_jails_jailinfo }}"
+    - "{{ freebsd_jails_users }}"
+  loop_control:
+    index_var: my_loop_var
+  ansible.builtin.command:
+    cmd: jexec -lU root {{ item[0]['name'] }} sh -c 'echo "{{ item[1]['password'] }}" | pw useradd -m -n {{ item[1]['user_name'] }} -h 0'

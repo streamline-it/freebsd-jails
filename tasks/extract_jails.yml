@@ -1,0 +1,47 @@
+- name: ensure the jail's base directory exists
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.file:
+    path: "{{ item['path'] }}"
+    owner: root
+    group: wheel
+    state: directory
+
+- name: check to see if jail has been extracted
+  register: jail_directory_stat
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.stat:
+    path: "{{ item['path'] }}"
+    get_attributes: true
+
+- name: create the jail's directory if it doesn't exist
+  when: jail_directory_stat['results'][my_loop_var]['stat']['exists'] == false
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  loop_control:
+    index_var: my_loop_var
+  ansible.builtin.file:
+    path: "{{ item['path'] }}"
+    owner: root
+    group: wheel
+    mode: "0700"
+
+- name: check to see if jail has been extracted
+  register: jail_extracted_stat
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.stat:
+    path: "{{ item['path'] }}/etc"
+    get_attributes: true
+
+- name: if jail hasn't been extracted, extract contents now
+  when: jail_extracted_stat['results'][my_loop_var]['stat']['exists'] == false
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  loop_control:
+    index_var: my_loop_var
+  ansible.builtin.unarchive:
+    src: "{{ item['dest'] }}"
+    dest: "{{ item['path'] }}"
+    remote_src: true

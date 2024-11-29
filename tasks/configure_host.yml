@@ -1,0 +1,6 @@
+---
+- name: ensure inetd doesn't try to bind to all rpcs
+  community.general.sysrc:
+    name: inetd_flags
+    value: "wW =a {{ ansible_default_ipv4['address'] }}"
+    state: present

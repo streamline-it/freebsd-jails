@@ -1,0 +1,34 @@
+---
+# tasks file for freebsd-jails
+
+- name: ensure gtar package is installed for the host
+  ansible.builtin.pkgng:
+    name: gtar
+    state: present
+
+- name: configure the host for jails use
+  ansible.builtin.include_tasks: configure_host.yml
+
+- name: call tasks to setup jail base directory 
+  ansible.builtin.include_tasks: setup_jail_base_directories.yml
+
+- name: ensure the base tar file exists registering stat result registring stat result
+  register: base_tar_stat
+  ansible.builtin.stat:
+    path: "{{ freebsd_jails_jails_path }}/{{ freebsd_jails_jails_base_dir }}"
+    get_attributes: true
+
+- name: call tasks to get the base.txz file
+  ansible.builtin.include_tasks: get_base.yml
+
+- name: call tasks to create the jail
+  ansible.builtin.include_tasks: extract_jails.yml
+
+- name: call tasks to make sure default files exist (fstab, rc.conf)
+  ansible.builtin.include_tasks: create_default_os_files.yml
+
+- name: call task to configure jail
+  ansible.builtin.include_tasks: configure_jails.yml
+
+- name: call task to add users to jail
+  ansible.builtin.include_tasks: configure_users.yml

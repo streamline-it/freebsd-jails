@@ -1,0 +1,48 @@
+- name: ensure IP address is reserved via alias to be used by the jail
+  notify: restart networking
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  loop_control:
+    index_var: my_loop_var
+  ansible.builtin.lineinfile:
+    path: /etc/rc.conf
+    line: "ifconfig_{{ item['nic'] }}_alias{{ my_loop_var }}='inet {{ item['ipv4_address']}} netmask 255.255.255.0'"
+    state: present
+
+- name: ensure jails config file exists
+  ansible.builtin.template:
+    src: jail.conf.j2
+    dest: /etc/jail.conf
+    owner: root
+    group: wheel
+    mode: "0644"
+
+- name: ensure entry exists in rc.conf to start jail
+  loop:
+    - jail_enable
+    - jail_parallel_start
+  community.general.sysrc:
+    name: "{{ item  }}"
+    value: "YES"
+    state: present
+
+- name: ensure jails service is enabled/started
+  ansible.builtin.service:
+    name: jail
+    enabled: true
+    state: started
+
+- name: ensure dns resolver is setup
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.blockinfile:
+    path: "{{ item['path'] }}/etc/resolv.conf"
+    block: |
+      {{ item['dns_resolver0'] }}
+      {{ item['dns_resolver1'] }}
+    marker: "#< {mark} ansible blockinfile block >"
+    marker_begin: "Start"
+    owner: root
+    group: wheel
+    mode: "0644"
+    state: present

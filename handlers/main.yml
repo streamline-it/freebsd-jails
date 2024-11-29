@@ -1,0 +1,6 @@
+---
+# handlers file for freebsd-jails
+- name: restart networking
+  ansible.builtin.service:
+    name: netif
+    state: restarted

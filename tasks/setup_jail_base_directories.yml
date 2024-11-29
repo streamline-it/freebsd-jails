@@ -1,0 +1,41 @@
+- name: figure out if host is using zfs
+  register: zfs_search
+  ansible.builtin.find:
+    paths: /etc
+    contains: 'zfs_enable="YES"'
+    patterns: 'rc.conf'
+
+- name: ensure jail dataset exists if zfs is used
+  when: zfs_search['matched'] == 1
+  community.general.zfs:
+    name: "{{ freebsd_jails_jails_path }}"
+    extra_zfs_properties:
+      mountpoint: "{{ freebsd_jails_jails_zfs_mountpoint }}"
+    state: present
+
+- name: ensure base jail directory exists if not using zfs
+  when: zfs_search['matched'] == 0
+  ansible.builtin.file:
+    path: "{{ freebsd_jails_jails_directory }}"
+    state: directory
+
+- name: ensure jail folder structure exists 
+  loop:
+    "{{ freebsd_jails_jail_folders }}"
+  ansible.builtin.file:
+    path: "{{ item['dir_name'] }}"
+    owner: "{{ item['owner'] }}"
+    group: "{{ item['group'] }}"
+    mode: "{{ item['mode'] }}"
+    state: directory
+
+- name: ensure a directory for each jail to the prior folder structure
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.file:
+    path: "{{ freebsd_jails_jail_folders[0]['dir_name'] }}/{{ item['name'] }}"
+    owner: "{{ freebsd_jails_jail_folders[0]['owner'] }}"
+    group: "{{ freebsd_jails_jail_folders[0]['group'] }}"
+    mode: "{{ freebsd_jails_jail_folders[0]['mode'] }}"
+    state: directory
+
