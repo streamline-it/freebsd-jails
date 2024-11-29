@@ -26,11 +26,17 @@
     value: "YES"
     state: present
 
-- name: ensure jails service is enabled/started
-  ansible.builtin.service:
-    name: jail
-    enabled: true
-    state: started
+- name: check to see if jail service is started
+  register: jail_stat
+  changed_when: false
+  ansible.builtin.shell:
+    cmd: service jail status | wc -l | tr -d ' '
+
+# not sure why, ansible.builtin.service not working
+- name: ensure jails service is started
+  when: jail_stat['stdout'] == "1"
+  ansible.builtin.command:
+    cmd: service jail start
 
 - name: ensure dns resolver is setup
   loop:
