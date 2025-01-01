@@ -5,7 +5,7 @@
 exec.start = "/bin/sh /etc/rc";
 exec.stop = "/bin/sh /etc/rc.shutdown jail";
 exec.clean;
-
+allow.mount.fdescfs;
 
 {%- for item in freebsd_jails_jailinfo %}
 
@@ -24,6 +24,8 @@ exec.clean;
     # permissions
     #
     mount.devfs;
+    enforce_statfs = 1;
+    
     # allows for traceroute and ping inside a jail
     # disable if not needed for troublshooting
     allow.raw_sockets;

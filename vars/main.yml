@@ -8,6 +8,10 @@ freebsd_jails_releases_online:
     algorithm: sha256sum
     checksum: sha256:565baf7cf520cedfa01c5260f6a614b71c5e2b37ba3ee22e1342906548aa24ad
     online_url: https://download.freebsd.org/ftp/releases/amd64/13.1-RELEASE/base.txz
+  - release: 13.2
+    algorithm: sha256sum
+    checksum: sha256:3a9250f7afd730bbe274691859756948b3c57a99bcda30d65d46ae30025906f0
+    online_url: https://download.freebsd.org/ftp/releases/amd64/13.2-RELEASE/base.txz
   - release: 13.3
     algorithm: sha256sum
     checksum: sha256:d10531d663cee5efeb7d696ca84ce90adacd1fae14dd249628fb74da0c7c2820
@@ -25,7 +29,11 @@ freebsd_jails_releases_local:
   - release: 13.1
     algorithm: sha256sum
     checksum: 565baf7cf520cedfa01c5260f6a614b71c5e2b37ba3ee22e1342906548aa24ad  base.txz
-    online_url: https://download.freebsd.org/ftp/releases/amd64/13.1-RELEASE/abase.txz
+    online_url: https://download.freebsd.org/ftp/releases/amd64/13.1-RELEASE/base.txz
+  - release: 13.2
+    algorithm: sha256sum
+    checksum: 3a9250f7afd730bbe274691859756948b3c57a99bcda30d65d46ae30025906f0  base.txz
+    online_url: https://download.freebsd.org/ftp/releases/amd64/13.2-RELEASE/base.txz
   - release: 13.3
     algorithm: sha256sum
     checksum: d10531d663cee5efeb7d696ca84ce90adacd1fae14dd249628fb74da0c7c2820  base.txz
