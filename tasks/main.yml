@@ -30,5 +30,8 @@
 - name: call task to configure jail
   ansible.builtin.include_tasks: configure_jails.yml
 
+- name: call task to add groups
+  ansible.builtin.include_tasks: configure_groups.yml
+
 - name: call task to add users to jail
   ansible.builtin.include_tasks: configure_users.yml

@@ -19,4 +19,4 @@
   loop_control:
     index_var: my_loop_var
   ansible.builtin.command:
-    cmd: jexec -lU root {{ item[0]['name'] }} sh -c 'echo "{{ item[1]['password'] }}" | pw useradd -m -n {{ item[1]['user_name'] }} -h 0'
+    cmd: jexec -lU root {{ item[0]['name'] }} sh -c 'echo "{{ item[1]['password'] }}" | pw useradd -G {{ item[1]['groups'] }} -m -n {{ item[1]['user_name'] }} -h 0'
