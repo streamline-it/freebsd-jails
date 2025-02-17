@@ -32,9 +32,8 @@
     "{{ freebsd_jails_jailinfo }}"
   ansible.builtin.lineinfile:
     path: /etc/rc.conf
-    line: 'ifconfig_{{ item["vnet_alias"] ="inet item["ipv4_address"] netmask item["vnet_netmask"] group item["vnet_groupname"]"'
+    line: 'ifconfig_{{ item["vnet_alias"] }}="inet {{ item["ipv4_address"] }} netmask {{ item["vnet_netmask"] }} group {{ item["vnet_groupname"] }}"'
     state: present
-
 - name: call task to configure jail
   ansible.builtin.include_tasks: configure_jails.yml
 
