@@ -27,7 +27,7 @@
 - name: call tasks to make sure default files exist (fstab, rc.conf)
   ansible.builtin.include_tasks: create_default_os_files.yml
 
-- name: ensure jail interface(s) alias exists
+- name: ensure jail interface(s) alias exists for each jail and interface group exists to be used for pf firewall
   loop:
     "{{ freebsd_jails_jailinfo }}"
   ansible.builtin.lineinfile:
