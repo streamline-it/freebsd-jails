@@ -27,6 +27,14 @@
 - name: call tasks to make sure default files exist (fstab, rc.conf)
   ansible.builtin.include_tasks: create_default_os_files.yml
 
+- name: ensure jail interface(s) alias exists
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.lineinfile:
+    path: /etc/rc.conf
+    line: 'ifconfig_{{ item["vnet_alias"] ="inet item["ipv4_address"] netmask item["vnet_netmask"] group item["vnet_groupname"]"'
+    state: present
+
 - name: call task to configure jail
   ansible.builtin.include_tasks: configure_jails.yml
 

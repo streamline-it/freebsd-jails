@@ -33,6 +33,9 @@ freebsd_jails_jailinfo:
     nic: en0
     dns_resolver0:
     dns_resolver1:
+    vnet_alias:
+    vnet_groupname:
+    vnet_netmask:
 
 # users to create in the jail; this should exist in a vault
 freebsd_jails_users:
