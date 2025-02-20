@@ -24,4 +24,4 @@
   loop:
     "{{ freebsd_jails_jailinfo }}"
   ansible.builtin.shell:
-    "echo 'y' | pkg -j {{ item['name'] }} -f"
+    "echo 'y' | pkg -j {{ item['name'] }} update -f"
