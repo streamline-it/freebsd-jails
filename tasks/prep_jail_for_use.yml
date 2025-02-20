@@ -5,7 +5,7 @@
     executable: /bin/sh
   loop:
     "{{ freebsd_jails_jailinfo }}"
-  ansible.builtin.command:
+  ansible.builtin.shell:
     "service -j {{ item['name'] }} netif restart"
 
 - name: restart routed service for jails
@@ -14,7 +14,7 @@
     executable: /bin/sh
   loop:
     "{{ freebsd_jails_jailinfo }}"
-  ansible.builtin.command:
+  ansible.builtin.shell:
     "service -j {{ item['name'] }} routed restart"
 
 - name: update package system for jails
@@ -23,5 +23,5 @@
     executable: /bin/sh
   loop:
     "{{ freebsd_jails_jailinfo }}"
-  ansible.builtin.command:
+  ansible.builtin.shell:
     "echo 'y' | pkg -j {{ item['name'] }} -f"
