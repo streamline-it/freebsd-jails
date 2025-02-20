@@ -46,7 +46,7 @@
   ansible.builtin.include_tasks: configure_groups.yml
 
 - name: call task to add users to jail
-a  ansible.builtin.include_tasks: configure_users.yml
+  ansible.builtin.include_tasks: configure_users.yml
 
 - name: call task to prep jail for use
   ansible.builtin.include_tasks: ./tasks/prep_jail_for_use.yml
