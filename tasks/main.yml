@@ -6,6 +6,11 @@
     name: gtar
     state: present
 
+- name: check to see of the jail conf exists
+  register: jail_conf_check
+  ansible.builtin.stat:
+    path: /etc/jail.conf
+
 - name: configure the host for jails use
   ansible.builtin.include_tasks: configure_host.yml
 
@@ -41,4 +46,7 @@
   ansible.builtin.include_tasks: configure_groups.yml
 
 - name: call task to add users to jail
-  ansible.builtin.include_tasks: configure_users.yml
+a  ansible.builtin.include_tasks: configure_users.yml
+
+- name: call task to prep jail for use
+  ansible.builtin.include_tasks: ./tasks/prep_jail_for_use.yml

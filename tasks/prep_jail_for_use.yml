@@ -1,0 +1,27 @@
+---
+- name: restart ifnet service for jails
+  when: jail_conf_check['stat']['exists'] == false
+  args:
+    executable: /bin/sh
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.command:
+    "service -j {{ item['name'] }} netif restart"
+
+- name: restart routed service for jails
+  when: jail_conf_check['stat']['exists'] == false
+  args:
+    executable: /bin/sh
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.command:
+    "service -j {{ item['name'] }} routed restart"
+
+- name: update package system for jails
+  when: jail_conf_check['stat']['exists'] == false
+  args:
+    executable: /bin/sh
+  loop:
+    "{{ freebsd_jails_jailinfo }}"
+  ansible.builtin.command:
+    "echo 'y' | pkg -j {{ item['name'] }} -f"
