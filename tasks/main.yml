@@ -40,10 +40,13 @@
     line: 'ifconfig_{{ item["vnet_alias"] }}="inet {{ item["ipv4_address"] }} netmask {{ item["vnet_netmask"] }} group {{ item["vnet_groupname"] }}"'
     state: present
 
-- name: restart ifnet if jails have just been installed
+- name: restart ifnet and routing services if jails have just been installed
   when: jail_conf_check['stat']['exists'] == false
+    loop:
+      - netif
+      - routing
   ansible.builtin.service:
-    name: netif
+    name: "{{ item }}"
     state: restarted
 
 - name: call task to configure jail
