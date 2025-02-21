@@ -42,9 +42,9 @@
 
 - name: restart ifnet and routing services if jails have just been installed
   when: jail_conf_check['stat']['exists'] == false
-    loop:
-      - netif
-      - routing
+  loop:
+    - netif
+    - routing
   ansible.builtin.service:
     name: "{{ item }}"
     state: restarted
