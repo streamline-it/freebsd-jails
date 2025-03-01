@@ -24,7 +24,7 @@
   loop:
     "{{ freebsd_jails_jailinfo }}"
   ansible.builtin.command:
-    "pkg -j {{ item['name'] }} bootstrap -f"
+    "echo 'y' | pkg -j {{ item['name'] }} bootstrap -f"
 
 - name: update package system for jails
   when: jail_conf_check['stat']['exists'] == false
