@@ -42,3 +42,8 @@ freebsd_jails_users:
   - name:
     groups:
     password:
+
+# used to create jail's host entries in /etc/hosts
+freebsd_jails_host_entries:
+   - hostline
+

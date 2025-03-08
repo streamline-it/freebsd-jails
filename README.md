@@ -103,6 +103,10 @@ freebsd_jails_releases_local:
     checksum: bb451694e8435e646b5ff7ddc5e94d5c6c9649f125837a34b2a2dd419732f347  base.txz
     online_url: https://download.freebsd.org/ftp/releases/amd64/14.1-RELEASE/base.txz
 
+# this will create the necessary host entries for a jail
+freebsd_jails_host_entries:
+  - hostline
+
 Dependencies
 ------------
 

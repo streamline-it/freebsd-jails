@@ -1,0 +1,9 @@
+---
+- name: ensure host entries exist for each jail
+  with_nested:
+    - "{{ freebsd_jails_jailinfo }}"
+    - "{{ freebsd_jails_host_entries }}"
+  when: item[0]['name'] not in item[1]
+  ansible.builtin.lineinfile:
+    path: "{{ item[0]['path'] }}/etc/hosts"
+    line: "{{ item[1] }}"
