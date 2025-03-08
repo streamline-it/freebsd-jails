@@ -44,6 +44,11 @@ freebsd_jails_users:
     password:
 
 # used to create jail's host entries in /etc/hosts
+#list host entries like this:
+#
+# freebsd_jails_host_entries:
+#   - 10.0.0.4 host1.example.com
+#   - 10.0.0.5 host2.example.com
+#
 freebsd_jails_host_entries:
-   - hostline
 

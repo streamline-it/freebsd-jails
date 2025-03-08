@@ -104,8 +104,12 @@ freebsd_jails_releases_local:
     online_url: https://download.freebsd.org/ftp/releases/amd64/14.1-RELEASE/base.txz
 
 # this will create the necessary host entries for a jail
+# list hosts like this:
+# freebsd_jails_host_entries:
+#    - host1.example.com
+#    - host2.example.com
+#
 freebsd_jails_host_entries:
-  - hostline
 
 Dependencies
 ------------
