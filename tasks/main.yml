@@ -1,6 +1,9 @@
 ---
 # tasks file for freebsd-jails
 
+- name: first, call tasks to run asserts
+  ansible.builtin.include_tasks: asserts.yml
+
 - name: ensure gtar package is installed for the host
   ansible.builtin.pkgng:
     name: gtar
