@@ -18,6 +18,6 @@
       freebsd_jails_jail_folders, freebsd_jails_users, freebsd_jails_host_entries)."
 
 - name: ensure freebsd_jails_online_pull is set to the correct value
-  ansbible.builtin.assert:
+  ansible.builtin.assert:
     that: freebsd_jails_online_pull == false or freebsd_online_pull == true
     fail_msg: "freebsd_jails_online_pull must be true or false"
