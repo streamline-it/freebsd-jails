@@ -3,18 +3,18 @@
   ansible.builtin.assert:
     that:
       - freebsd_jails_online_pull is defined
-      - freebsd_jails_path is defined
-      - freebsd_jails_directory is defined
-      - freebsd_jails_zfs_mountpoint is defined
-      - freebsd_jails_base_dir is defined
+      - freebsd_jails_jails_path is defined
+      - freebsd_jails_jails_directory is defined
+      - freebsd_jails_jails_zfs_mountpoint is defined
+      - freebsd_jails_jails_base_dir is defined
       - freebsd_jails_jail_folders is defined
       - freebsd_jails_jailinfo is defined
       - freebsd_jails_users
       - freebsd_jails_host_entries
     fail_msg: >
       "Make sure the following variables are defined (
-      freebsd_jails_online_pull, freebsd_jails_path, freebsd_jails_directory
-      freebsd_jails_zfs_mountpoint, freebsd_jails_base_dir, 
+      freebsd_jails_online_pull, freebsd_jails_jails_path, freebsd_jails_jails_directory
+      freebsd_jails_jails_zfs_mountpoint, freebsd_jails_base_dir, 
       freebsd_jails_jail_folders, freebsd_jails_users, freebsd_jails_host_entries)."
 
 - name: ensure freebsd_jails_online_pull is set to the correct value
