@@ -6,6 +6,7 @@
     - "{{ freebsd_jails_users }}"
   register: user_stat
   changed_when: false
+  failed_when: user_stat['rc'] > 2
   ansible.builtin.command:
     cmd: jexec -lU root {{ item[0]['name'] }} getent passwd {{ item[1]['user_name'] }}
 
