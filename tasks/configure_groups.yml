@@ -12,7 +12,6 @@
 
 - name: ensure groups exist
   ignore_errors: true
-  debugger: always
   when: groups_stat['results'][my_loop_var]['rc'] == 2
   with_nested:
     - "{{ freebsd_jails_jailinfo }}"
