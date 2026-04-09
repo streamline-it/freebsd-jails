@@ -51,4 +51,3 @@ freebsd_jails_users:
 #   - 10.0.0.5 host2.example.com
 #
 freebsd_jails_host_entries:
-

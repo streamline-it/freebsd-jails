@@ -59,6 +59,13 @@ freebsd_jails_users:
     groups:
     password:
 
+# this will create the necessary host entries for a jail
+# list hosts like this:
+# freebsd_jails_host_entries:
+#    - host1.example.com
+#    - host2.example.com
+#
+freebsd_jails_host_entries:
 
 # vars file for freebsd-jails
 
@@ -103,13 +110,6 @@ freebsd_jails_releases_local:
     checksum: bb451694e8435e646b5ff7ddc5e94d5c6c9649f125837a34b2a2dd419732f347  base.txz
     online_url: https://download.freebsd.org/ftp/releases/amd64/14.1-RELEASE/base.txz
 
-# this will create the necessary host entries for a jail
-# list hosts like this:
-# freebsd_jails_host_entries:
-#    - host1.example.com
-#    - host2.example.com
-#
-freebsd_jails_host_entries:
 
 Dependencies
 ------------
@@ -119,11 +119,72 @@ None
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+By default this role assumes ZFS filesystem.  It will create the jails under zroot/jails dataset. The below is an example of the simpliest configuration
+Good idea to secure the "freebsd_jails_users" variable in a vault.  In these example the jailname "web-jail" is used.  Replace that with your jail name of choice.
 
-    - hosts: servers
-      roles:
-         - name: freebsd-jails
+Breakdown of the freebsd_jail_info variable:
+
+<name of your jail> = The jail name to be used on the host.  Used to setup your jail in the jail.conf file.
+url = Refers to the vars variable freebsd_jails-releases_online.  Use the index in this example "0" to point to the 13.1's base.txz download.
+src = Location in the file system for the base.txz file
+checksum = Uses the vars freebsd_jails_releases_online variable.  The index in this case "0" points to the first checksum for 13.1 release.
+nic = Interface name of the host
+dns_resolver0/1 = The primary and secondary DNS name server.  Ex for primary: "nameserver 10.0.0.1"
+vnet_alias = IPv4 alias for the jail.
+vnet_groupname = Interface for the groupname for the jail.  This can be used in the firewall to controll traffic to/from the jail
+
+freebsd_jails_jailinfo:
+  - name: web-jail 
+    path: "{{ freebsd_jails_jails_directory }}/<name of your jail>"
+    url: "{{ freebsd_jails_releases_online[0]['online_url'] }}"
+    src: <path to the base.txz on the filesystem>
+    checksum: "{{ freebsd_jails_releases_online[0]['checksum'] }}"
+    dest: "/root/{{ freebsd_jails_jails_base_dir}}/<name of your jail>/base.txz"
+    ipv4_address: <IPv4 address for the jail>
+    ipv6_address: <IPv6 address for the jail> (optional)
+    nic: <interface name of the host>
+    dns_resolver0: <nameserver entry for the jail>
+    dns_resolver1: <secondary nameserver entry for the jail>
+    vnet_alias: <interface alias>
+    vnet_groupname: <interface group name>
+    vnet_netmask: <IPv4 netmask>
+
+Example playbook below:
+
+- hosts: servers
+
+  vars:
+
+    # role variables below:
+
+    freebsd_jails_online_pull: false
+
+    freebsd_jails_users:
+      - name: rich
+        groups: rich
+        password: secure-password
+ 
+    freebsd_jails_host_entries:
+      - 10.0.0.4 web.example.com
+
+freebsd_jails_jailinfo:
+  - name: web-jail 
+    path: "{{ freebsd_jails_jails_directory }}/web-jail"
+    url: "{{ freebsd_jails_releases_online[0]['online_url'] }}"
+    src: /mnt/nfs/priv/bsd/base/13.1/base.txz
+    checksum: "{{ freebsd_jails_releases_online[0]['checksum'] }}"
+    dest: "/root/{{ freebsd_jails_jails_base_dir}}/web-jail/base.txz"
+    ipv4_address: 172.16.20.100
+    ipv6_address:
+    nic: en0
+    dns_resolver0: nameserver 10.0.0.1
+    dns_resolver1: nameserver 8.8.8.8
+    vnet_alias: en0_alias0
+    vnet_groupname: web_jail_int
+    vnet_netmask: 255.255.255.0
+
+  roles:
+    - name: freebsd-jails
 
 License
 -------
@@ -133,6 +194,5 @@ BSD
 Author Information
 ------------------
 
-streamline-it
-
+rich ohara
 
