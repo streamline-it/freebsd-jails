@@ -133,57 +133,52 @@ dns_resolver0/1 = The primary and secondary DNS name server.  Ex for primary: "n
 vnet_alias = IPv4 alias for the jail.
 vnet_groupname = Interface for the groupname for the jail.  This can be used in the firewall to controll traffic to/from the jail
 
-freebsd_jails_jailinfo:
-  - name: web-jail 
-    path: "{{ freebsd_jails_jails_directory }}/<name of your jail>"
-    url: "{{ freebsd_jails_releases_online[0]['online_url'] }}"
-    src: <path to the base.txz on the filesystem>
-    checksum: "{{ freebsd_jails_releases_online[0]['checksum'] }}"
-    dest: "/root/{{ freebsd_jails_jails_base_dir}}/<name of your jail>/base.txz"
-    ipv4_address: <IPv4 address for the jail>
-    ipv6_address: <IPv6 address for the jail> (optional)
-    nic: <interface name of the host>
-    dns_resolver0: <nameserver entry for the jail>
-    dns_resolver1: <secondary nameserver entry for the jail>
-    vnet_alias: <interface alias>
-    vnet_groupname: <interface group name>
-    vnet_netmask: <IPv4 netmask>
-
 Example playbook below:
 
-- hosts: servers
+- name: testing jail role
+  hosts: node8.freebsd13.example.com
+  become: true
 
   vars:
 
-    # role variables below:
+    my_samba_jail_ipv4_address: 172.16.20.89
+
+    # the following variable should exist in a secured vault
+    freebsd_jails_users:
+      - user_name: rohara
+        groups: rohara
+        password: secretpassword
+
+    freebsd_jails_groups:
+      - name: samba_users
+        gid: 1006
+      - name: rohara
+        gid: 1000
 
     freebsd_jails_online_pull: false
 
-    freebsd_jails_users:
-      - name: rich
-        groups: rich
-        password: secure-password
- 
-    freebsd_jails_host_entries:
-      - 10.0.0.4 web.example.com
+    freebsd_jails_jailinfo:
+      - name: jp2_samba
+        path: "{{ freebsd_jails_jails_directory }}/jp2_samba"
+        url: "{{ freebsd_jails_releases_online[1]['online_url'] }}"
+        src: /mnt/nfs/priv/bsd/base/13.2/base.txz
+        local_checksum: "{{ freebsd_jails_releases_local[1]['checksum'] }}"
+        online_checksum: "{{ freebsd_jails_releases_online[1]['checksum'] }}"
+        dest: "/jails/{{ freebsd_jails_jails_base_dir}}/jp2_samba/base.txz"
+        ipv4_address: "{{ my_samba_jail_ipv4_address }}"
+        ipv6_address:
+        nic: vtnet0
+        dns_resolver0: nameserver 172.16.20.1
+        dns_resolver1: nameserver 8.8.8.8
+        vnet_alias: vtnet0_alias0
+        vnet_groupname: samba_jail_int
+        vnet_netmask: 255.255.255.0
 
-freebsd_jails_jailinfo:
-  - name: web-jail 
-    path: "{{ freebsd_jails_jails_directory }}/web-jail"
-    url: "{{ freebsd_jails_releases_online[0]['online_url'] }}"
-    src: /mnt/nfs/priv/bsd/base/13.1/base.txz
-    checksum: "{{ freebsd_jails_releases_online[0]['checksum'] }}"
-    dest: "/root/{{ freebsd_jails_jails_base_dir}}/web-jail/base.txz"
-    ipv4_address: 172.16.20.100
-    ipv6_address:
-    nic: en0
-    dns_resolver0: nameserver 10.0.0.1
-    dns_resolver1: nameserver 8.8.8.8
-    vnet_alias: en0_alias0
-    vnet_groupname: web_jail_int
-    vnet_netmask: 255.255.255.0
+    freebsd_jails_host_entries:
+      - 172.16.20.85 backup_server.example.com
 
   roles:
+
     - name: freebsd-jails
 
 License

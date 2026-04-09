@@ -11,7 +11,6 @@
     cmd: jexec -lU root {{ item[0]['name'] }} getent passwd {{ item[1]['user_name'] }}
 
 - name: ensure users exist 
-  ignore_errors: true
   when: user_stat['results'][my_loop_var]['rc'] == 2
   with_nested:
     - "{{ freebsd_jails_jailinfo }}"

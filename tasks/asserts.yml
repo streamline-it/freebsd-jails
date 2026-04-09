@@ -19,7 +19,7 @@
       - freebsd_jails_users is truthy
       - freebsd_jails_host_entries is defined
       - freebsd_jails_host_entries is truthy
-    fail_msg: "Make sure the following variables defined and have valid values""
+    fail_msg: "Make sure the following variables defined and have valid values"
 
 - name: check boolean variables have correct values
   ansible.builtin.assert:
