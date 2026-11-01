@@ -24,6 +24,10 @@ freebsd_jails_releases_online:
     algorithm: sha256sum
     checksum: sha256:bb451694e8435e646b5ff7ddc5e94d5c6c9649f125837a34b2a2dd419732f347
     online_url: https://download.freebsd.org/ftp/releases/amd64/14.1-RELEASE/base.txz
+  - release: 14.4
+    algorithm: sha256sum
+    checksum: sha256:769f60a6eea2938ad6b7943cfbcc17dfaf7d1f7ba59a32b869a00349302df853
+    online_url: https://download.freebsd.org/ftp/releases/amd64/14.4-RELEASE/base.txz
 
 freebsd_jails_releases_local:
   - release: 13.1
@@ -46,3 +50,7 @@ freebsd_jails_releases_local:
     algorithm: sha256sum
     checksum: bb451694e8435e646b5ff7ddc5e94d5c6c9649f125837a34b2a2dd419732f347  base.txz
     online_url: https://download.freebsd.org/ftp/releases/amd64/14.1-RELEASE/base.txz
+  - release: 14.4
+    algorithm: sha256sum
+    checksum: 769f60a6eea2938ad6b7943cfbcc17dfaf7d1f7ba59a32b869a00349302df853  base.txz
+    online_url: https://download.freebsd.org/ftp/releases/amd64/14.4-RELEASE/base.txz
